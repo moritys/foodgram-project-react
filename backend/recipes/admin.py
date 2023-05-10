@@ -1,126 +1,50 @@
-from django.contrib.admin import (ModelAdmin, TabularInline, display, register,
-                                  site)
-from django.core.handlers.wsgi import WSGIRequest
-from django.utils.html import format_html
-from django.utils.safestring import SafeString, mark_safe
-from recipes.forms import TagForm
-from recipes.models import (AmountIngredient, Carts, Favorites, Ingredient,
-                            Recipe, Tag)
+from django.contrib import admin
 
-site.site_header = 'Администрирование Foodgram'
-EMPTY_VALUE_DISPLAY = 'Значение не указано'
+from . import models
 
 
-class IngredientInline(TabularInline):
-    model = AmountIngredient
-    extra = 2
+@admin.register(models.Ingredient)
+class IngredientAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'measurement_unit')
+    list_filter = ('name', )
+    search_fields = ('name', )
 
 
-@register(AmountIngredient)
-class LinksAdmin(ModelAdmin):
-    pass
+@admin.register(models.Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'color', 'slug')
+    list_editable = ('name', 'color', 'slug')
+    empty_value_display = '-пусто-'
 
 
-@register(Ingredient)
-class IngredientAdmin(ModelAdmin):
-    list_display = (
-        'name', 'measurement_unit',
+@admin.register(models.Recipe)
+class RecipeAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'author', 'in_favorites')
+    list_editable = (
+        'name', 'author'
     )
-    search_fields = (
-        'name',
-    )
-    list_filter = (
-        'name',
-    )
+    readonly_fields = ('in_favorites',)
+    list_filter = ('name', 'author', 'tags')
+    empty_value_display = '-пусто-'
 
-    save_on_top = True
-    empty_value_display = EMPTY_VALUE_DISPLAY
+    @admin.display(description='В избранном')
+    def in_favorites(self, obj):
+        return obj.favorite_recipe.count()
 
 
-@register(Recipe)
-class RecipeAdmin(ModelAdmin):
-    list_display = (
-        'name', 'author', 'get_image', 'count_favorites',
-    )
-    fields = (
-        ('name', 'cooking_time',),
-        ('author', 'tags',),
-        ('text',),
-        ('image',),
-    )
-    raw_id_fields = ('author', )
-    search_fields = (
-        'name', 'author__username', 'tags__name',
-    )
-    list_filter = (
-        'name', 'author__username', 'tags__name'
-    )
-
-    inlines = (IngredientInline,)
-    save_on_top = True
-    empty_value_display = EMPTY_VALUE_DISPLAY
-
-    def get_image(self, obj: Recipe) -> SafeString:
-        return mark_safe(f'<img src={obj.image.url} width="80" hieght="30"')
-
-    get_image.short_description = 'Изображение'
-
-    def count_favorites(self, obj: Recipe) -> int:
-        return obj.in_favorites.count()
-
-    count_favorites.short_description = 'В избранном'
+@admin.register(models.RecipeIngredient)
+class RecipeIngredientAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'recipe', 'ingredient', 'amount')
+    list_editable = ('recipe', 'ingredient', 'amount')
 
 
-@register(Tag)
-class TagAdmin(ModelAdmin):
-    form = TagForm
-    list_display = (
-        'name', 'slug', 'color_code',
-    )
-    search_fields = (
-        'name', 'color'
-    )
-
-    save_on_top = True
-    empty_value_display = EMPTY_VALUE_DISPLAY
-
-    @display(description='Colored')
-    def color_code(self, obj):
-        return format_html(
-            '<span style="color: #{};">{}</span>',
-            obj.color[1:], obj.color
-        )
-
-    color_code.short_description = 'Цветовой код тэга'
+@admin.register(models.Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'user', 'recipe')
+    list_editable = ('user', 'recipe')
 
 
-@register(Favorites)
-class FavoriteAdmin(ModelAdmin):
-    list_display = (
-        'user', 'recipe', 'date_added'
-    )
-    search_fields = (
-        'user__username', 'recipe__name'
-    )
-
-    def has_change_permission(self, request, obj):
-        return False
-
-    def has_delete_permission(self, request, obj):
-        return False
-
-
-@register(Carts)
-class CardAdmin(ModelAdmin):
-    list_display = (
-        'user', 'recipe', 'date_added'
-    )
-    search_fields = (
-        'user__username', 'recipe__name'
-    )
-
-    def has_change_permission(self, request, obj):
-        return False
-
-    def has_delete_permission(self, request, obj):
-        return False
+@admin.register(models.ShoppingCart)
+class ShoppingCartAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'user', 'recipe')
+    list_editable = ('user', 'recipe')

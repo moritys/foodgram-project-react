@@ -1,24 +1,16 @@
-from api.views import (BaseAPIRootView, IngredientViewSet, RecipeViewSet,
-                       TagViewSet, UserViewSet)
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-app_name = 'api'
+from . import views
 
+router = DefaultRouter()
+router.register(r'recipes', views.RecipeViewSet, basename='recipes')
+router.register(r'tags', views.TagViewSet, basename='tags')
+router.register(r'users', views.UserViewSet, basename='users')
+router.register(
+    r'ingredients', views.IngredientViewSet, basename='ingredients')
 
-class RuDefaultRouter(DefaultRouter):
-    """Показывает описание главной страницы API на русском языке.
-    """
-    APIRootView = BaseAPIRootView
-
-
-router = RuDefaultRouter()
-router.register('tags', TagViewSet, 'tags')
-router.register('ingredients', IngredientViewSet, 'ingredients')
-router.register('recipes', RecipeViewSet, 'recipes')
-router.register('users', UserViewSet, 'users')
-
-urlpatterns = (
+urlpatterns = [
     path('', include(router.urls)),
-    path('auth/', include('djoser.urls.authtoken')),
-)
+    path(r'auth/', include('djoser.urls.authtoken')),
+]

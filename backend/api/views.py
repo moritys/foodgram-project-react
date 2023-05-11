@@ -1,14 +1,19 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+
 from django_filters.rest_framework import DjangoFilterBackend
+
 from foodgram.settings import FILE_NAME
+
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
+
 from rest_framework import filters, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+
 from users.models import Subscribe, User
 
 from .filters import RecipeFilter
@@ -148,7 +153,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                                           context={"request": request})
             serializer.is_valid(raise_exception=True)
             if not ShoppingCart.objects.filter(user=request.user,
-                                                recipe=recipe).exists():
+                                               recipe=recipe).exists():
                 ShoppingCart.objects.create(user=request.user, recipe=recipe)
                 return Response(serializer.data,
                                 status=status.HTTP_201_CREATED)

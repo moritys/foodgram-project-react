@@ -14,6 +14,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
             or obj.author == request.user
         )
 
+
 class AdminOrReadOnly(permissions.BasePermission):
     """
     Разрешение на создание и изменение только для админов.

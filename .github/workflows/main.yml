@@ -62,14 +62,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            # sudo docker pull moritys/api_yamdb
-            # sudo docker stop $(sudo docker ps -a -q)
-            # sudo docker run --rm -d -p 5000:5000 moritys/api_yamdb
-
             sudo systemctl stop nginx
             sudo systemctl disable nginx
             sudo docker-compose stop
-            sudo docker-compose rm web
+            sudo docker-compose rm backend
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env

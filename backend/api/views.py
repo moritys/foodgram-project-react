@@ -18,7 +18,7 @@ from users.models import Subscribe, User
 
 from .filters import RecipeFilter
 from .pagination import CustomPaginator
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, AdminOrReadOnly
 from .serializers import (IngredientSerializer, RecipeCreateSerializer,
                           RecipeReadSerializer, RecipeSerializer,
                           SetPasswordSerializer, SubscribeAuthorSerializer,
@@ -100,8 +100,8 @@ class IngredientViewSet(mixins.ListModelMixin,
 class TagViewSet(mixins.ListModelMixin,
                  mixins.RetrieveModelMixin,
                  viewsets.GenericViewSet):
-    permission_classes = (AllowAny, )
     queryset = Tag.objects.all()
+    permission_classes = (AdminOrReadOnly, )
     serializer_class = TagSerializer
     pagination_class = None
 

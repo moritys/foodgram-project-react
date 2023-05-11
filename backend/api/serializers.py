@@ -174,14 +174,12 @@ class SubscribeAuthorSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    """[GET] Список ингредиентов."""
     class Meta:
         model = Ingredient
         fields = '__all__'
 
 
 class TagSerializer(serializers.ModelSerializer):
-    """[GET] Список тегов."""
     class Meta:
         model = Tag
         fields = '__all__'

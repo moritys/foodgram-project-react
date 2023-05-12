@@ -26,6 +26,12 @@ from .serializers import (IngredientSerializer, RecipeCreateSerializer,
                           UserCreateSerializer, UserReadSerializer)
 
 
+class IngredientTagMixinViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """Mixin for Ingredient and Tag models."""
+    pagination_class = None
+
+
 class UserViewSet(mixins.CreateModelMixin,
                   mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
@@ -86,24 +92,18 @@ class UserViewSet(mixins.CreateModelMixin,
                             status=status.HTTP_204_NO_CONTENT)
 
 
-class IngredientViewSet(mixins.ListModelMixin,
-                        mixins.RetrieveModelMixin,
-                        viewsets.GenericViewSet):
+class IngredientViewSet(IngredientTagMixinViewSet):
     queryset = Ingredient.objects.all()
     permission_classes = (AllowAny, )
     serializer_class = IngredientSerializer
-    pagination_class = None
     filter_backends = (filters.SearchFilter, )
     search_fields = ('^name', )
 
 
-class TagViewSet(mixins.ListModelMixin,
-                 mixins.RetrieveModelMixin,
-                 viewsets.GenericViewSet):
+class TagViewSet(IngredientTagMixinViewSet):
     queryset = Tag.objects.all()
     permission_classes = (AdminOrReadOnly, )
     serializer_class = TagSerializer
-    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):

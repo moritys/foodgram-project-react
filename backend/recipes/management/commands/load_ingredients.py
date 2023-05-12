@@ -3,7 +3,7 @@ import os
 
 from django.core.management.base import BaseCommand
 
-# from foodgram import settings
+from foodgram import settings
 
 from progress.bar import IncrementalBar
 
@@ -21,7 +21,7 @@ class Command(BaseCommand):
     help = "Load ingredients to DB"
 
     def handle(self, *args, **options):
-        path = os.path('./data/ingredients.csv')
+        path = os.path.join(settings.BASE_DIR, './data/ingredients.csv')
         with open(path, 'r', encoding='utf-8') as file:
             row_count = sum(1 for row in file)
         with open(path, 'r', encoding='utf-8') as file:

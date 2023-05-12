@@ -8,7 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # вынесла ключ в переменные, но он выдавал ошибки про скобки и символы
-# пробовала и с кавычками и без, пришлось оставить так 
+# пробовала и с кавычками и без, пришлось оставить так
 SECRET_KEY = os.getenv(
     'SECRET_KEY',
     default='lkxmd@gb5%pd)ed48s4_2kng8mke!i3(m!@*(@6sv(9_a!)^#!'

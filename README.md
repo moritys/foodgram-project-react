@@ -18,9 +18,10 @@
  - добавить все секретные переменные в проект на github
  - изменить данные docker-hub на свои
  - провести миграции внутри контейнера:
-```docker-compose exec web python manage.py migrate```
-```docker-compose exec web python manage.py createsuperuser```
-```docker-compose exec web python manage.py collectstatic --no-input```
+
+`docker-compose exec web python manage.py migrate`
+`docker-compose exec web python manage.py createsuperuser`
+`docker-compose exec web python manage.py collectstatic --no-input`
 
 #### Шаблон наполнения env-файла
 

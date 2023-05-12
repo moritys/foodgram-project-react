@@ -137,21 +137,11 @@ class RecipeIngredient(models.Model):
                 f'{self.ingredient.measurement_unit}')
 
 
-class FavoriteCartClass(models.Model):
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'recipe'],
-                name='unique_error'
-            )
-        ]
-
-    def __str__(self):
-        return f'{self.user.username} - {self.recipe.name}'
-
-
-class Favorite(FavoriteCartClass):
+# вынесла избранное и корзину в общую модель, но
+# разные related_name и verbose_name не дают полностью вынести поля
+# от этого в общей модели не работают констрейнс,
+# оставила две отдельные модели
+class Favorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -168,9 +158,18 @@ class Favorite(FavoriteCartClass):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_favorite'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} - {self.recipe.name}'
 
 
-class ShoppingCart(FavoriteCartClass):
+class ShoppingCart(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -182,8 +181,17 @@ class ShoppingCart(FavoriteCartClass):
         on_delete=models.CASCADE,
         related_name='shopping_recipe',
         verbose_name='Рецепт в корзине'
-    )
+    ) 
 
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзина'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_shopping_cart'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} - {self.recipe.name}'

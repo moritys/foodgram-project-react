@@ -18,7 +18,7 @@ from users.models import Subscribe, User
 
 from .filters import RecipeFilter
 from .pagination import CustomPaginator
-from .permissions import IsAuthorOrReadOnly, AdminOrReadOnly
+from .permissions import AdminOrReadOnly, IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeCreateSerializer,
                           RecipeReadSerializer, RecipeSerializer,
                           SetPasswordSerializer, SubscribeAuthorSerializer,
@@ -27,7 +27,9 @@ from .serializers import (IngredientSerializer, RecipeCreateSerializer,
 
 
 class IngredientTagMixinViewSet(
-    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    mixins.ListModelMixin, mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
+):
     """Mixin for Ingredient and Tag models."""
     pagination_class = None
 

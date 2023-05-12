@@ -18,9 +18,10 @@
  - добавить все секретные переменные в проект на github
  - изменить данные docker-hub на свои
  - провести миграции внутри контейнера:
-    ```docker-compose exec web python manage.py migrate ```
-    ```docker-compose exec web python manage.py createsuperuser ```
-    ```docker-compose exec web python manage.py collectstatic --no-input```
+```docker-compose exec web python manage.py migrate```
+```docker-compose exec web python manage.py createsuperuser```
+```docker-compose exec web python manage.py collectstatic --no-input```
+
 #### Шаблон наполнения env-файла
 
     SECRET_KEY  =  'yoursecretdjangokey'
@@ -41,8 +42,8 @@
 Проект доступен по ip адресу [http://51.250.107.108/recipes](http://51.250.107.108/recipes)
 ##### Доступ к админке:
 [http://51.250.107.108/admin](http://51.250.107.108/admin)
-**логин** admin
-**пароль** 1234 (либо 4321)
+ - **логин** admin
+ - **пароль** 1234 (либо 4321)
 
 ##### Автор
 [Masha](https://t.me/mori_tys)

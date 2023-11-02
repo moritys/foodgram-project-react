@@ -41,12 +41,6 @@ docker-compose exec web python manage.py collectstatic --no-input
     
     DB_PORT = 5432 # порт для подключения к БД
 ---
-### Доступ к проекту
-Проект доступен по ip адресу [http://51.250.107.108/recipes](http://51.250.107.108/recipes)
-##### Доступ к админке:
-[http://51.250.107.108/admin](http://51.250.107.108/admin)
- - **логин** admin
- - **пароль** 1234 (либо 4321)
 
 ##### Автор
 [Masha](https://t.me/mori_tys)
